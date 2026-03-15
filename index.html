@@ -4,484 +4,761 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lit and Love LLC</title>
-  <meta name="description" content="Lit and Love LLC — Literacy. Leadership. Lasting Impact. Supporting educators and students through intentional instruction and meaningful learning." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --purple:      #4a1a4a;
-      --purple-dark: #3a1238;
-      --purple-light:#5c2260;
-      --gold:        #d4a017;
-      --gold-light:  #e8c040;
-      --white:       #ffffff;
-      --muted:       rgba(255,255,255,0.65);
-    }
-
-    html { scroll-behavior: smooth; }
-    body { background: var(--purple); color: var(--white); font-family: 'Lato', sans-serif; -webkit-font-smoothing: antialiased; }
-    ::selection { background: rgba(212,160,23,0.3); }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--purple-dark); }
-    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-
-    /* ── NAV ── */
-    nav {
-      background: var(--purple-dark);
-      border-bottom: 1px solid rgba(212,160,23,0.25);
-      padding: 14px 40px;
-      display: flex; justify-content: space-between; align-items: center;
-      position: sticky; top: 0; z-index: 100;
-    }
-    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .logo-script { font-family: 'Dancing Script', cursive; font-size: 26px; color: var(--gold); line-height: 1; }
-    .logo-llc { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-    .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-    .nav-link { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: color 0.15s; }
-    .nav-link:hover { color: var(--gold); }
-
-    /* ── BUTTONS ── */
-    .btn { padding: 11px 32px; border-radius: 40px; border: 2px solid var(--gold); background: var(--gold); color: var(--purple); font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.18s; display: inline-block; }
-    .btn:hover { background: var(--gold-light); border-color: var(--gold-light); }
-    .btn-outline { background: transparent; color: var(--gold); text-decoration: underline; }
-    .btn-outline:hover { background: rgba(212,160,23,0.12); }
-    .btn-sm { padding: 8px 22px; font-size: 12px; }
-
-    /* ── LAYOUT ── */
-    .container { max-width: 960px; margin: 0 auto; padding: 0 40px; }
-    .section { padding: 72px 40px; }
-    .section-dark { background: var(--purple-dark); }
-    .section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
-    .section-title { font-family: 'Dancing Script', cursive; font-size: clamp(32px, 4vw, 48px); color: var(--gold); margin-bottom: 16px; }
-
-    /* ── DIVIDER ── */
-    .divider { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 36px 0; }
-    .divider-sq { width: 12px; height: 12px; border: 2px solid var(--gold); border-radius: 2px; }
-    .divider-line { height: 2px; width: 180px; background: var(--gold); opacity: 0.6; }
-
-    /* ── HERO ── */
-    #hero { text-align: center; padding: 80px 40px 60px; background: var(--purple); }
-    .hero-logo-script { font-family: 'Dancing Script', cursive; font-size: clamp(46px, 8vw, 80px); color: var(--gold); line-height: 1.1; margin-top: 8px; }
-    .hero-tagline { font-size: 13px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
-    .hero-sub { font-size: 17px; color: var(--muted); max-width: 620px; margin: 0 auto 36px; line-height: 1.75; font-weight: 300; }
-    .pill-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
-    /* ── BELIEF CHIPS ── */
-    .chips { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; justify-content: center; }
-    .chip { padding: 7px 16px; border-radius: 20px; border: 1px solid rgba(212,160,23,0.4); color: var(--gold); font-size: 12px; font-weight: 600; }
-
-    /* ── TWO COL ── */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-
-    /* ── CARD ── */
-    .card { background: var(--purple); border-radius: 14px; border: 1px solid rgba(212,160,23,0.2); padding: 22px 20px; }
-    .card-gold-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 14px; }
-    .bullet { font-size: 13px; color: var(--muted); margin-bottom: 8px; padding-left: 12px; border-left: 2px solid rgba(212,160,23,0.4); }
-    .check { display: flex; gap: 10px; margin-bottom: 10px; font-size: 14px; color: var(--muted); }
-    .check span:first-child { color: var(--gold); flex-shrink: 0; }
-
-    /* ── TOOL CARDS ── */
-    .tool-card { background: var(--purple); border-radius: 16px; border: 1px solid rgba(212,160,23,0.25); padding: 28px 26px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; display: block; }
-    .tool-card:hover { border-color: rgba(212,160,23,0.7); background: var(--purple-light); }
-    .tool-emoji { font-size: 38px; margin-bottom: 10px; }
-    .tool-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-    .tool-title { font-family: 'Dancing Script', cursive; font-size: 26px; color: var(--gold); margin-bottom: 10px; }
-    .tool-desc { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 18px; }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
-    .tag { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(212,160,23,0.35); color: var(--gold); font-weight: 600; }
-    .tool-cta { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); text-decoration: underline; }
-
-    /* ── ABOUT ── */
-    .about-grid { display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
-    .about-sidebar { text-align: center; }
-    .avatar { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 14px; background: linear-gradient(135deg, var(--gold), #b8860b); display: flex; align-items: center; justify-content: center; font-size: 48px; border: 3px solid var(--gold); }
-    .founder-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
-    .founder-title { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
-    .sidebar-logo-script { font-family: 'Dancing Script', cursive; font-size: 20px; color: var(--gold); margin-top: 6px; }
-    .sidebar-btn-col { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-
-    /* ── QUOTE BOX ── */
-    .quote-box { background: var(--purple-dark); border-radius: 14px; padding: 28px 32px; text-align: center; border: 1px solid rgba(212,160,23,0.2); margin-top: 32px; }
-    .quote-text { font-size: 15px; color: var(--white); line-height: 1.85; max-width: 800px; margin: 0 auto 12px; font-weight: 300; font-style: italic; }
-    .quote-attr { font-size: 13px; color: var(--gold); font-weight: 600; }
-
-    /* ── FOOTER ── */
-    footer { background: var(--purple-dark); border-top: 1px solid rgba(212,160,23,0.25); padding: 32px 40px; }
-    .footer-inner { max-width: 960px; margin: 0 auto; }
-    .footer-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
-    .footer-links { display: flex; gap: 16px; }
-    .footer-link { font-size: 12px; color: var(--muted); text-decoration: none; font-weight: 600; transition: color 0.15s; }
-    .footer-link:hover { color: var(--gold); }
-    .footer-bottom { text-align: center; padding-top: 16px; border-top: 1px solid rgba(212,160,23,0.15); }
-    .footer-credential { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-    .footer-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-    .footer-copy { font-size: 11px; color: rgba(255,255,255,0.3); }
-
-    /* ── TOOLS PAGE ── */
-    #tools-page, #annotate-page, #guide-page { display: none; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 720px) {
-      nav { padding: 12px 16px; }
-      .nav-links { display: none; }
-      .section, #hero { padding: 48px 20px; }
-      .container { padding: 0 20px; }
-      .two-col, .three-col, .about-grid { grid-template-columns: 1fr; gap: 20px; }
-      .about-sidebar { display: none; }
-    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--purple:#4a1a4a;--pdark:#3a1238;--plight:#5c2260;--gold:#d4a017;--goldl:#e8c040;--w:#fff;--m:rgba(255,255,255,0.65)}
+    html{scroll-behavior:smooth}
+    body{background:var(--purple);color:var(--w);font-family:'Lato',sans-serif;-webkit-font-smoothing:antialiased}
+    ::selection{background:rgba(212,160,23,0.3)}
+    #home-page{display:block}
+    #react-annotate,#react-guide{display:none;min-height:100vh}
+    .nav{background:var(--pdark);border-bottom:1px solid rgba(212,160,23,0.25);padding:14px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+    .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+    .logoscript{font-family:'Dancing Script',cursive;font-size:26px;color:var(--gold);line-height:1}
+    .navlinks{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .navlink{color:var(--m);font-size:12px;font-weight:600;text-decoration:none;padding:6px 12px;border-radius:6px;transition:color .15s;background:none;border:none;cursor:pointer;font-family:'Lato',sans-serif}
+    .navlink:hover{color:var(--gold)}
+    .btn{padding:11px 32px;border-radius:40px;border:2px solid var(--gold);background:var(--gold);color:var(--purple);font-family:'Lato',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .18s;display:inline-block}
+    .btn:hover{background:var(--goldl);border-color:var(--goldl)}
+    .bto{background:transparent!important;color:var(--gold)!important;text-decoration:underline}
+    .bto:hover{background:rgba(212,160,23,.12)!important}
+    .bsm{padding:8px 22px!important;font-size:12px!important}
+    .sec{padding:72px 40px}
+    .sdark{background:var(--pdark)}
+    .con{max-width:960px;margin:0 auto}
+    .lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+    .ttl{font-family:'Dancing Script',cursive;font-size:clamp(32px,4vw,48px);color:var(--gold);margin-bottom:16px}
+    .div{display:flex;align-items:center;justify-content:center;gap:12px;margin:36px 0}
+    .dsq{width:12px;height:12px;border:2px solid var(--gold);border-radius:2px}
+    .dln{height:2px;width:180px;background:var(--gold);opacity:.6}
+    .twoc{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+    .threc{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+    .card{background:var(--purple);border-radius:14px;border:1px solid rgba(212,160,23,.2);padding:22px 20px}
+    .blt{font-size:13px;color:var(--m);margin-bottom:8px;padding-left:12px;border-left:2px solid rgba(212,160,23,.4)}
+    .chip{padding:7px 16px;border-radius:20px;border:1px solid rgba(212,160,23,.4);color:var(--gold);font-size:12px;font-weight:600;display:inline-block}
+    .tc{background:var(--purple);border-radius:16px;border:1px solid rgba(212,160,23,.25);padding:28px 26px;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;display:block}
+    .tc:hover{border-color:rgba(212,160,23,.7);background:var(--plight)}
+    .tag{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid rgba(212,160,23,.35);color:var(--gold);font-weight:600;display:inline-block;margin:3px}
+    @media(max-width:720px){.nav{padding:12px 16px}.navlinks{display:none}.sec,#hero{padding:48px 20px}.twoc,.threc{grid-template-columns:1fr;gap:20px}}
   </style>
 </head>
 <body>
-
-<!-- ═══════════════════════════════════════════════════════════ HOME PAGE -->
 <div id="home-page">
-
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="logo" onclick="showPage('home')">
-      <svg width="40" height="40" viewBox="0 0 80 80" fill="none">
-        <rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-        <rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/>
-        <rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-        <rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/>
-        <rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/>
-        <rect x="36" y="16" width="4" height="48" rx="2" fill="#a07818"/>
-        <path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity="0.95"/>
-      </svg>
-      <div>
-        <div class="logo-script">Lit and Love</div>
-        <div class="logo-llc">LLC</div>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="#students" class="nav-link">For Students &amp; Families</a>
-      <a href="#schools" class="nav-link">For Schools &amp; Leaders</a>
-      <a href="#about" class="nav-link">About</a>
-      <a onclick="showPage('tools')" href="#" class="nav-link">Tools</a>
-      <a href="https://www.litandlove.com" target="_blank" class="btn btn-sm">Contact</a>
+  <nav class="nav">
+    <div class="logo" onclick="showPage('home')">
+      <svg width="40" height="40" viewBox="0 0 80 80" fill="none"><rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/><rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/><rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/><rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/><rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/><path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity=".95"/></svg>
+      <div><div class="logoscript">Lit and Love</div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--m)">LLC</div></div>
+    </div>
+    <div class="navlinks">
+      <a href="#students" class="navlink">For Students &amp; Families</a>
+      <a href="#schools" class="navlink">For Schools &amp; Leaders</a>
+      <a href="#about" class="navlink">About</a>
+      <button class="navlink" onclick="showPage('annotate')">📚 Annotate Tool</button>
+      <button class="navlink" onclick="showPage('guide')">🔎 Reading Guide</button>
+      <a href="https://www.litandlove.com" target="_blank" class="btn bsm">Contact</a>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:28px;">
-      <svg width="90" height="90" viewBox="0 0 80 80" fill="none">
-        <rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-        <rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/>
-        <rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-        <rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/>
-        <rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/>
-        <rect x="36" y="16" width="4" height="48" rx="2" fill="#a07818"/>
-        <path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity="0.95"/>
-      </svg>
-      <div class="hero-logo-script">Lit and Love</div>
-    </div>
-    <div class="hero-tagline">Literacy. Leadership. Lasting Impact.</div>
-    <p class="hero-sub">Supporting educators and students through intentional instruction and meaningful learning.</p>
-    <div class="pill-row">
+  <section id="hero" style="text-align:center;padding:80px 40px 60px;background:var(--purple)">
+    <svg width="90" height="90" viewBox="0 0 80 80" fill="none" style="display:block;margin:0 auto 8px"><rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/><rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/><rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/><rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/><rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/><path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity=".95"/></svg>
+    <div style="font-family:'Dancing Script',cursive;font-size:clamp(46px,8vw,80px);color:var(--gold);line-height:1.1;margin-bottom:18px">Lit and Love</div>
+    <div style="font-size:13px;font-weight:900;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Literacy. Leadership. Lasting Impact.</div>
+    <p style="font-size:17px;color:var(--m);max-width:620px;margin:0 auto 36px;line-height:1.75;font-weight:300">Supporting educators and students through intentional instruction and meaningful learning.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
       <a href="#students" class="btn">For Students &amp; Families</a>
-      <a href="#schools" class="btn btn-outline">For Schools &amp; Leaders</a>
+      <a href="#schools" class="btn bto">For Schools &amp; Leaders</a>
     </div>
-
-    <div class="divider"><div class="divider-sq"></div><div class="divider-line"></div><div class="divider-sq"></div></div>
-
-    <p style="font-size:16px;color:var(--white);max-width:760px;margin:0 auto;line-height:1.85;font-weight:300;">
-      Lit &amp; Love, LLC partners with schools and educators to strengthen literacy instruction,
-      amplify student voice, and build systems that actually work.
-    </p>
-    <p style="margin-top:14px;font-size:14px;color:var(--muted);max-width:720px;margin:14px auto 0;line-height:1.85;font-weight:300;">
-      Founded by award-winning educator Comfort Agboola, Lit &amp; Love brings research-based practices,
-      real classroom experience, and purpose-driven leadership to schools ready to move beyond survival
-      and toward sustainable success.
-    </p>
-    <div class="chips">
-      <div class="chip">✦ Practical, classroom-ready strategies</div>
-      <div class="chip">✦ Teacher support and instructional clarity</div>
-      <div class="chip">✦ Student engagement and confidence</div>
-      <div class="chip">✦ Sustainable systems that last</div>
+    <div class="div"><div class="dsq"></div><div class="dln"></div><div class="dsq"></div></div>
+    <p style="font-size:16px;color:var(--w);max-width:760px;margin:0 auto;line-height:1.85;font-weight:300">Lit &amp; Love, LLC partners with schools and educators to strengthen literacy instruction, amplify student voice, and build systems that actually work.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;justify-content:center">
+      <span class="chip">✦ Practical, classroom-ready strategies</span>
+      <span class="chip">✦ Teacher support and instructional clarity</span>
+      <span class="chip">✦ Student engagement and confidence</span>
+      <span class="chip">✦ Sustainable systems that last</span>
     </div>
   </section>
 
-  <!-- FOR STUDENTS -->
-  <section id="students" class="section section-dark">
-    <div class="container">
-      <div class="section-label">For Students &amp; Families</div>
-      <h2 class="section-title">For Students &amp; Families</h2>
-      <div style="font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:16px;">
-        Personalized Literacy Support That Builds Confidence and Academic Growth
-      </div>
-      <p style="font-size:15px;color:var(--muted);max-width:720px;line-height:1.8;margin-bottom:36px;font-weight:300;">
-        Lit &amp; Love offers personalized literacy support to enhance students' reading, writing skills, and confidence.
-        Led by award-winning educator Comfort Agboola, the program emphasizes individualized instruction and
-        collaborates with families for meaningful, lasting impact.
-      </p>
-      <div class="two-col" style="margin-bottom:40px;">
-        <div>
-          <div class="card-gold-title">How We Support Students</div>
-          <div class="bullet">• Literacy and writing development</div>
-          <div class="bullet">• Reading comprehension and skill-building</div>
-          <div class="bullet">• Academic confidence and motivation</div>
-          <div class="bullet">• Organization and study strategies</div>
-          <div class="bullet">• Personalized instruction tailored to each learner</div>
+  <section class="sec sdark">
+    <div class="con" style="text-align:center">
+      <div class="lbl">Free Classroom Tools</div>
+      <h2 class="ttl">Tools Built for Readers &amp; Thinkers</h2>
+      <p style="font-size:15px;color:var(--m);max-width:560px;margin:0 auto 40px;line-height:1.8;font-weight:300">Free, AI-powered tools for students and teachers — grounded in research-based literacy practices.</p>
+      <div class="twoc">
+        <div class="tc" onclick="showPage('annotate')">
+          <div style="font-size:38px;margin-bottom:10px">📚</div>
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">For Students &amp; Teachers</div>
+          <div style="font-family:'Dancing Script',cursive;font-size:26px;color:var(--gold);margin-bottom:10px">Annotate &amp; Understand</div>
+          <p style="font-size:14px;color:var(--m);line-height:1.75;margin-bottom:16px">Highlight, tag, and respond to close reading prompts. Teacher dashboard, AI feedback, export student work.</p>
+          <div><span class="tag">AI Feedback</span><span class="tag">Teacher Dashboard</span><span class="tag">6 Annotation Types</span></div>
+          <div style="margin-top:16px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);text-decoration:underline">Open Tool →</div>
         </div>
-        <div>
-          <div class="card-gold-title">Why Families Choose Lit &amp; Love</div>
-          <div class="check"><span>✦</span>Personalized, student-centered instruction</div>
-          <div class="check"><span>✦</span>A warm, encouraging learning environment</div>
-          <div class="check"><span>✦</span>Focus on confidence, growth, and skill-building</div>
-          <div class="check"><span>✦</span>Experience supporting diverse learners</div>
-          <div class="check"><span>✦</span>Support for neurodivergent learners</div>
+        <div class="tc" onclick="showPage('guide')">
+          <div style="font-size:38px;margin-bottom:10px">🔎</div>
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">For Students &amp; Teachers</div>
+          <div style="font-family:'Dancing Script',cursive;font-size:26px;color:var(--gold);margin-bottom:10px">Reading Guide Generator</div>
+          <p style="font-size:14px;color:var(--m);line-height:1.75;margin-bottom:16px">Take a photo of any text or paste it in. Get an instant annotation question guide tailored to your role.</p>
+          <div><span class="tag">Photo Upload</span><span class="tag">Camera Capture</span><span class="tag">AI-Powered</span></div>
+          <div style="margin-top:16px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);text-decoration:underline">Open Tool →</div>
         </div>
       </div>
-      <div class="pill-row" style="justify-content:flex-start;">
+    </div>
+  </section>
+
+  <section id="students" class="sec">
+    <div class="con">
+      <div class="lbl">For Students &amp; Families</div>
+      <h2 class="ttl">For Students &amp; Families</h2>
+      <div style="font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">Personalized Literacy Support That Builds Confidence and Academic Growth</div>
+      <p style="font-size:15px;color:var(--m);max-width:720px;line-height:1.8;margin-bottom:36px;font-weight:300">Lit &amp; Love offers personalized literacy support to enhance students' reading, writing skills, and confidence. Led by award-winning educator Comfort Agboola, the program emphasizes individualized instruction and collaborates with families for meaningful, lasting impact.</p>
+      <div class="twoc" style="margin-bottom:36px">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px">How We Support Students</div>
+          <div class="blt">• Literacy and writing development</div>
+          <div class="blt">• Reading comprehension and skill-building</div>
+          <div class="blt">• Academic confidence and motivation</div>
+          <div class="blt">• Organization and study strategies</div>
+          <div class="blt">• Personalized instruction tailored to each learner</div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px">Why Families Choose Lit &amp; Love</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px;color:var(--m)"><span style="color:var(--gold)">✦</span>Personalized, student-centered instruction</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px;color:var(--m)"><span style="color:var(--gold)">✦</span>A warm, encouraging learning environment</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px;color:var(--m)"><span style="color:var(--gold)">✦</span>Focus on confidence, growth, and skill-building</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px;color:var(--m)"><span style="color:var(--gold)">✦</span>Experience supporting diverse learners</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px;color:var(--m)"><span style="color:var(--gold)">✦</span>Support for neurodivergent learners</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
         <a href="https://www.litandlove.com" target="_blank" class="btn">Schedule a Family Consultation</a>
-        <a href="https://www.litandlove.com" target="_blank" class="btn btn-outline">Frequently Asked Questions</a>
+        <a href="https://www.litandlove.com" target="_blank" class="btn bto">Frequently Asked Questions</a>
       </div>
     </div>
   </section>
 
-  <!-- FOR SCHOOLS -->
-  <section id="schools" class="section">
-    <div class="container">
-      <div class="section-label">For Schools &amp; Leaders</div>
-      <h2 class="section-title">For Schools &amp; Leaders</h2>
-      <p style="font-size:15px;color:var(--white);max-width:800px;line-height:1.85;margin-bottom:10px;font-weight:600;">
-        Lit &amp; Love, LLC partners with schools and educational organizations to strengthen literacy instruction,
-        support educators, and build learning environments where students thrive.
-      </p>
-      <p style="font-size:14px;color:var(--muted);max-width:800px;line-height:1.85;margin-bottom:40px;font-weight:300;">
-        Our work is rooted in the belief that strong instruction begins with supported teachers and intentional design.
-        We provide tailored, research-based solutions that respond to real classroom needs — not one-size-fits-all programs.
-      </p>
-      <div class="three-col" style="margin-bottom:40px;">
-        <div class="card">
-          <div class="card-gold-title">Professional Development</div>
-          <div class="bullet">• Writing instruction and workshop models</div>
-          <div class="bullet">• Reading comprehension strategies</div>
-          <div class="bullet">• State assessment preparation</div>
-          <div class="bullet">• Student engagement and motivation</div>
-          <div class="bullet">• Instructional planning and assessment alignment</div>
-          <div style="margin-top:12px;font-size:12px;font-style:italic;color:rgba(212,160,23,0.7);">Half-day, full-day, or multi-session.</div>
-        </div>
-        <div class="card">
-          <div class="card-gold-title">Instructional Coaching</div>
-          <div class="bullet">• Classroom observations and feedback</div>
-          <div class="bullet">• Lesson planning assistance</div>
-          <div class="bullet">• Data-informed instructional strategies</div>
-          <div class="bullet">• Collaborative problem-solving</div>
-          <div class="bullet">• Support for new and experienced educators</div>
-          <div style="margin-top:12px;font-size:12px;font-style:italic;color:rgba(212,160,23,0.7);">Grounded in real classroom practice.</div>
-        </div>
-        <div class="card">
-          <div class="card-gold-title">Curriculum Support</div>
-          <div class="bullet">• Curriculum mapping and alignment</div>
-          <div class="bullet">• Writing and literacy program development</div>
-          <div class="bullet">• Assessment design and analysis</div>
-          <div class="bullet">• Resource development for teachers</div>
-          <div style="margin-top:12px;font-size:12px;font-style:italic;color:rgba(212,160,23,0.7);">Aligned with standards and student needs.</div>
-        </div>
+  <section id="schools" class="sec sdark">
+    <div class="con">
+      <div class="lbl">For Schools &amp; Leaders</div>
+      <h2 class="ttl">For Schools &amp; Leaders</h2>
+      <p style="font-size:15px;color:var(--w);max-width:800px;line-height:1.85;margin-bottom:10px;font-weight:600">Lit &amp; Love, LLC partners with schools and educational organizations to strengthen literacy instruction, support educators, and build learning environments where students thrive.</p>
+      <p style="font-size:14px;color:var(--m);max-width:800px;line-height:1.85;margin-bottom:36px;font-weight:300">Our work is rooted in the belief that strong instruction begins with supported teachers and intentional design. We provide tailored, research-based solutions — not one-size-fits-all programs.</p>
+      <div class="threc" style="margin-bottom:36px">
+        <div class="card"><div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px">Professional Development</div><div class="blt">• Writing instruction and workshop models</div><div class="blt">• Reading comprehension strategies</div><div class="blt">• State assessment preparation</div><div class="blt">• Student engagement and motivation</div><div style="margin-top:12px;font-size:12px;font-style:italic;color:rgba(212,160,23,.7)">Half-day, full-day, or multi-session.</div></div>
+        <div class="card"><div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px">Instructional Coaching</div><div class="blt">• Classroom observations and feedback</div><div class="blt">• Lesson planning assistance</div><div class="blt">• Data-informed instructional strategies</div><div class="blt">• Collaborative problem-solving</div><div style="margin-top:12px;font-size:12px;font-style:italic;color:rgba(212,160,23,.7)">Grounded in real classroom practice.</div></div>
+        <div class="card"><div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px">Curriculum Support</div><div class="blt">• Curriculum mapping and alignment</div><div class="blt">• Writing and literacy program development</div><div class="blt">• Assessment design and analysis</div><div class="blt">• Resource development for teachers</div><div style="margin-top:12px;font-size:12px;font-style:italic;color:rgba(212,160,23,.7)">Aligned with standards and student needs.</div></div>
       </div>
       <a href="https://www.litandlove.com" target="_blank" class="btn">Request a School Consultation</a>
     </div>
   </section>
 
-  <!-- TOOLS SECTION -->
-  <section class="section section-dark">
-    <div class="container" style="text-align:center;">
-      <div class="section-label">Free Classroom Tools</div>
-      <h2 class="section-title">Tools Built for Readers &amp; Thinkers</h2>
-      <p style="font-size:15px;color:var(--muted);max-width:580px;margin:0 auto 48px;line-height:1.8;font-weight:300;">
-        Free interactive tools for students, teachers, and families — grounded in the same research-based
-        literacy practices that drive all Lit &amp; Love work.
-      </p>
-      <div class="divider"><div class="divider-sq"></div><div class="divider-line"></div><div class="divider-sq"></div></div>
-      <div class="two-col" style="margin-top:8px;text-align:left;">
-        <a href="#" onclick="showPage('annotate');return false;" class="tool-card">
-          <div class="tool-emoji">📚</div>
-          <div class="tool-sub">For Students &amp; Teachers</div>
-          <div class="tool-title">Annotate &amp; Understand</div>
-          <p class="tool-desc">Highlight, tag, and respond to close reading prompts directly in any text. Teachers set passages, customize prompts, and view a full student dashboard — with AI feedback built in.</p>
-          <div class="tag-row">
-            <span class="tag">AI Feedback</span><span class="tag">Teacher Dashboard</span>
-            <span class="tag">Export &amp; Share</span><span class="tag">6 Annotation Types</span>
-          </div>
-          <div class="tool-cta">Open Tool →</div>
-        </a>
-        <a href="#" onclick="showPage('guide');return false;" class="tool-card">
-          <div class="tool-emoji">🔎</div>
-          <div class="tool-sub">For Students &amp; Teachers</div>
-          <div class="tool-title">Reading Guide Generator</div>
-          <p class="tool-desc">Take a photo of any text — a textbook page, a poem, an article — or paste it in. Get an instant, categorized annotation question guide tailored to your reading and your role.</p>
-          <div class="tag-row">
-            <span class="tag">Photo Upload</span><span class="tag">Camera Capture</span>
-            <span class="tag">Custom Categories</span><span class="tag">AI-Powered</span>
-          </div>
-          <div class="tool-cta">Open Tool →</div>
-        </a>
+  <section id="about" class="sec">
+    <div class="con">
+      <div class="lbl">About</div>
+      <h2 class="ttl">About Me</h2>
+      <p style="font-size:15px;color:var(--w);line-height:1.85;margin-bottom:16px;font-weight:300">Lit &amp; Love, LLC was founded by award-winning educator Comfort Agboola with a clear purpose: to strengthen literacy instruction, elevate student voice, and support educators in building learning environments where students thrive.</p>
+      <p style="font-size:15px;color:var(--m);line-height:1.85;margin-bottom:28px;font-weight:300">With over a decade of experience in the classroom and instructional leadership, Comfort brings a deep understanding of what teachers and students truly need to succeed. Her work is rooted in the belief that literacy is more than reading and writing — it is confidence, agency, and access to opportunity.</p>
+      <div class="twoc" style="margin-bottom:28px">
+        <div><div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px">Core Beliefs</div><div class="blt">• Literacy boosts confidence, voice, and opportunities.</div><div class="blt">• Teachers need meaningful support and clear tools.</div><div class="blt">• Students excel when they feel seen, valued, and challenged.</div><div class="blt">• Sustainable change requires intentional systems, not quick fixes.</div><div class="blt">• Education should balance rigor with compassion.</div></div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px">Services Offered</div><div class="blt">• Literacy-focused professional development</div><div class="blt">• Instructional coaching and curriculum design</div><div class="blt">• Writing workshops and literacy enrichment</div><div class="blt">• Research-based classroom strategies</div><div class="blt">• Support for student-centered learning environments</div><div class="blt">• Individual tutoring and academic support for families</div></div>
+      </div>
+      <div style="background:var(--pdark);border-radius:14px;padding:28px 32px;text-align:center;border:1px solid rgba(212,160,23,.2)">
+        <p style="font-size:15px;color:var(--w);line-height:1.85;max-width:800px;margin:0 auto 12px;font-weight:300;font-style:italic">"Lit &amp; Love is grounded in collaboration, intentional design, and practical application. Every partnership is tailored to meet the unique needs of each school community."</p>
+        <div style="font-size:13px;color:var(--gold);font-weight:600">— Comfort Agboola, Founder</div>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about" class="section">
-    <div class="container">
-      <div class="section-label">About</div>
-      <h2 class="section-title">About Me</h2>
-      <div class="about-grid">
-        <div class="about-sidebar">
-          <div class="avatar">👩🏾‍🏫</div>
-          <div class="founder-name">Comfort Agboola</div>
-          <div class="founder-title">Founder</div>
-          <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
-            <rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-            <rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/>
-            <rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-            <rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/>
-            <rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/>
-            <path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity="0.95"/>
-          </svg>
-          <div class="sidebar-logo-script">Lit and Love</div>
-          <div style="font-size:10px;letter-spacing:2px;color:var(--muted);">LLC</div>
-          <div class="sidebar-btn-col">
-            <a href="https://www.litandlove.com" target="_blank" class="btn btn-sm btn-outline">Contact</a>
-            <a href="https://www.litandlove.com" target="_blank" class="btn btn-sm btn-outline">Resume</a>
-          </div>
-        </div>
-        <div>
-          <p style="font-size:15px;color:var(--white);line-height:1.85;margin-bottom:16px;font-weight:300;">
-            Lit &amp; Love, LLC was founded by award-winning educator Comfort Agboola with a clear purpose:
-            to strengthen literacy instruction, elevate student voice, and support educators in building
-            learning environments where students thrive.
-          </p>
-          <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:28px;font-weight:300;">
-            With over a decade of experience in the classroom and instructional leadership, Comfort brings
-            a deep understanding of what teachers and students truly need to succeed. Her work is rooted
-            in the belief that literacy is more than reading and writing — it is confidence, agency,
-            and access to opportunity.
-          </p>
-          <div class="two-col">
-            <div>
-              <div class="card-gold-title">Core Beliefs</div>
-              <div class="bullet">• Literacy boosts confidence, voice, and opportunities.</div>
-              <div class="bullet">• Teachers need meaningful support and clear tools.</div>
-              <div class="bullet">• Students excel when they feel seen, valued, and challenged.</div>
-              <div class="bullet">• Sustainable change requires intentional systems, not quick fixes.</div>
-              <div class="bullet">• Education should balance rigor with compassion.</div>
-            </div>
-            <div>
-              <div class="card-gold-title">Services Offered</div>
-              <div class="bullet">• Literacy-focused professional development</div>
-              <div class="bullet">• Instructional coaching and curriculum design</div>
-              <div class="bullet">• Writing workshops and literacy enrichment</div>
-              <div class="bullet">• Research-based classroom strategies</div>
-              <div class="bullet">• Support for student-centered learning environments</div>
-              <div class="bullet">• Individual tutoring and academic support for families</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="quote-box">
-        <p class="quote-text">"Lit &amp; Love is grounded in collaboration, intentional design, and practical application. Every partnership is tailored to meet the unique needs of each school community, with a focus on strengthening instruction, supporting educators, and helping students grow with confidence."</p>
-        <div class="quote-attr">— Comfort Agboola, Founder</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section section-dark" style="text-align:center;border-top:1px solid rgba(212,160,23,0.2);">
-    <div class="container">
-      <h2 class="section-title">Let's Start With a Conversation</h2>
-      <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:32px;font-weight:300;max-width:600px;margin:0 auto 32px;">
-        Whether you're a parent seeking support for your child or a school leader looking to strengthen
-        instruction, the first step is a thoughtful, personalized conversation.
-      </p>
-      <div class="pill-row">
+  <section class="sec sdark" style="text-align:center;border-top:1px solid rgba(212,160,23,.2)">
+    <div class="con">
+      <h2 class="ttl">Let's Start With a Conversation</h2>
+      <p style="font-size:15px;color:var(--m);line-height:1.85;margin-bottom:32px;font-weight:300;max-width:600px;margin:0 auto 32px">Whether you're a parent seeking support or a school leader looking to strengthen instruction — let's connect.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
         <a href="https://www.litandlove.com" target="_blank" class="btn">Schedule a Family Consultation</a>
-        <a href="https://www.litandlove.com" target="_blank" class="btn btn-outline">Request a School Consultation</a>
-      </div>
-      <div style="margin-top:24px;font-size:12px;color:rgba(212,160,23,0.6);font-style:italic;">
-        No pressure or obligation — just a thoughtful conversation.
+        <a href="https://www.litandlove.com" target="_blank" class="btn bto">Request a School Consultation</a>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <svg width="36" height="36" viewBox="0 0 80 80" fill="none">
-            <rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-            <rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/>
-            <rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/>
-            <rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/>
-            <rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/>
-            <path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity="0.9"/>
-          </svg>
-          <span style="font-family:'Dancing Script',cursive;font-size:22px;color:var(--gold);">Lit and Love</span>
-        </div>
-        <div class="footer-links">
-          <a href="https://www.litandlove.com" target="_blank" class="footer-link">Facebook</a>
-          <a href="https://www.litandlove.com" target="_blank" class="footer-link">Instagram</a>
-          <a href="https://www.linkedin.com/in/comfort-agboola-689893167/" target="_blank" class="footer-link">LinkedIn</a>
-        </div>
+  <footer style="background:var(--pdark);border-top:1px solid rgba(212,160,23,.25);padding:32px 40px">
+    <div style="max-width:960px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px"><svg width="36" height="36" viewBox="0 0 80 80" fill="none"><rect x="8" y="18" width="30" height="44" rx="3" fill="#b8860b"/><rect x="12" y="18" width="26" height="44" rx="2" fill="#d4a017"/><rect x="38" y="18" width="30" height="44" rx="3" fill="#b8860b"/><rect x="38" y="18" width="26" height="44" rx="2" fill="#c8941a"/><rect x="35" y="16" width="6" height="48" rx="3" fill="#8B6914"/><path d="M40 46 C40 46 28 38 28 31 C28 26.5 31.5 23 36 26 C38 27 40 29 40 29 C40 29 42 27 44 26 C48.5 23 52 26.5 52 31 C52 38 40 46 40 46Z" fill="white" opacity=".9"/></svg><span style="font-family:'Dancing Script',cursive;font-size:22px;color:var(--gold)">Lit and Love</span></div>
+        <div style="display:flex;gap:16px"><a href="https://www.instagram.com/lit_and_love/" target="_blank" style="font-size:12px;color:var(--m);text-decoration:none;font-weight:600">Instagram</a><a href="https://www.linkedin.com/in/comfort-agboola-689893167/" target="_blank" style="font-size:12px;color:var(--m);text-decoration:none;font-weight:600">LinkedIn</a></div>
       </div>
-      <div class="footer-bottom">
-        <div class="footer-credential">Comfort Agboola</div>
-        <div class="footer-sub">Milken Educator Award Recipient · Instructional Leader · Literacy Advocate</div>
-        <div class="footer-copy">© <span id="yr"></span> Lit and Love LLC · Chicago, IL · cbagboola@cps.edu</div>
+      <div style="text-align:center;padding-top:16px;border-top:1px solid rgba(212,160,23,.15)">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Comfort Agboola</div>
+        <div style="font-size:12px;color:var(--m);margin-bottom:12px">Milken Educator Award Recipient · Instructional Leader · Literacy Advocate</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3)">© <span id="yr"></span> Lit and Love LLC · Chicago, IL · cbagboola@cps.edu</div>
       </div>
     </div>
   </footer>
 </div>
 
-<!-- ═══════════════════════════════════════════════════ ANNOTATE PAGE SHELL -->
-<div id="annotate-page">
-  <div style="min-height:100vh;background:#0a0f1e;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;">
-    <div style="font-size:48px;margin-bottom:16px;">📚</div>
-    <h1 style="font-family:'Dancing Script',cursive;font-size:40px;color:#d4a017;margin-bottom:12px;">Annotate &amp; Understand</h1>
-    <p style="color:rgba(255,255,255,0.65);max-width:480px;line-height:1.7;margin-bottom:28px;font-size:15px;">
-      The full annotation tool is loading. If it doesn't appear, please make sure your Anthropic API key is added in Vercel's environment variables.
-    </p>
-    <button onclick="showPage('home')" style="padding:10px 24px;border-radius:40px;border:2px solid #d4a017;background:transparent;color:#d4a017;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">
-      ← Back to Home
-    </button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════ GUIDE PAGE SHELL -->
-<div id="guide-page">
-  <div style="min-height:100vh;background:#08090f;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;">
-    <div style="font-size:48px;margin-bottom:16px;">🔎</div>
-    <h1 style="font-family:'Dancing Script',cursive;font-size:40px;color:#d4a017;margin-bottom:12px;">Reading Guide Generator</h1>
-    <p style="color:rgba(255,255,255,0.65);max-width:480px;line-height:1.7;margin-bottom:28px;font-size:15px;">
-      The full reading guide tool is loading. If it doesn't appear, please make sure your Anthropic API key is added in Vercel's environment variables.
-    </p>
-    <button onclick="showPage('home')" style="padding:10px 24px;border-radius:40px;border:2px solid #d4a017;background:transparent;color:#d4a017;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">
-      ← Back to Home
-    </button>
-  </div>
-</div>
+<div id="react-annotate"><div id="annotate-root"></div></div>
+<div id="react-guide"><div id="guide-root"></div></div>
 
 <script>
-  // Year
-  document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('yr').textContent = new Date().getFullYear();
+window.annotateLoaded = false;
+window.guideLoaded = false;
+function showPage(p) {
+  document.getElementById('home-page').style.display = p==='home' ? 'block' : 'none';
+  document.getElementById('react-annotate').style.display = p==='annotate' ? 'block' : 'none';
+  document.getElementById('react-guide').style.display = p==='guide' ? 'block' : 'none';
+  window.scrollTo(0,0);
+  if (p==='annotate' && !window.annotateLoaded) { window.annotateLoaded=true; loadAnnotate(); }
+  if (p==='guide' && !window.guideLoaded) { window.guideLoaded=true; loadGuide(); }
+}
+showPage('home');
+</script>
 
-  // Simple page routing
-  function showPage(page) {
-    document.getElementById('home-page').style.display    = page === 'home'    ? 'block' : 'none';
-    document.getElementById('annotate-page').style.display = page === 'annotate' ? 'block' : 'none';
-    document.getElementById('guide-page').style.display   = page === 'guide'   ? 'block' : 'none';
-    window.scrollTo(0, 0);
-    return false;
+<script type="text/babel" data-presets="react">
+function loadAnnotate() {
+  const TYPES = [
+    {id:"question",label:"Question",emoji:"❓",color:"#F59E0B",bg:"#FEF3C7",desc:"Something you wonder about"},
+    {id:"connection",label:"Connection",emoji:"🔗",color:"#8B5CF6",bg:"#EDE9FE",desc:"Connects to life or another text"},
+    {id:"vocabulary",label:"Vocabulary",emoji:"📖",color:"#EF4444",bg:"#FEE2E2",desc:"Unknown or important word"},
+    {id:"evidence",label:"Evidence",emoji:"⭐",color:"#10B981",bg:"#D1FAE5",desc:"Strong evidence or key detail"},
+    {id:"inference",label:"Inference",emoji:"💡",color:"#3B82F6",bg:"#DBEAFE",desc:"What the author implies"},
+    {id:"theme",label:"Theme/Big Idea",emoji:"🎯",color:"#EC4899",bg:"#FCE7F3",desc:"Connects to a central theme"},
+  ];
+  const DEFAULT_PROMPTS = [
+    "What is the author's central argument or message? What evidence supports it?",
+    "Choose one powerful word or phrase. Why did the author choose it?",
+    "What is the tone of this passage? How does the author create it?",
+    "What assumptions does the author make about the reader or subject?",
+    "How does the structure of this text support its meaning?",
+  ];
+  const SAMPLE = `In the fall of 1955, a woman named Rosa Parks refused to give up her seat on a Montgomery, Alabama bus. She was tired — not the kind of tired that comes from a long day's work, but the kind of tired that settles deep in the bones after years of being told you are less than. Her act of refusal was quiet. She did not shout. She did not march. She simply stayed seated.\n\nBut that stillness became a storm.\n\nWithin days, the Black community of Montgomery organized a boycott of the city's bus system. For 381 days, people walked miles to work, carpooled with strangers, and sacrificed convenience for conviction. The boycott worked. The Supreme Court ruled that bus segregation was unconstitutional.\n\nSome revolutions begin with a single word: no.`;
+  const {useState,useRef,useCallback,useEffect}=React;
+  const C={bg:'#0a0f1e',sf:'rgba(255,255,255,0.035)',br:'rgba(255,255,255,0.08)',gold:'#e8a020',rose:'#e8466a',mu:'#94a3b8',tx:'#e2e8f0'};
+  const btn=(x={})=>({padding:'9px 18px',borderRadius:'8px',border:'none',cursor:'pointer',fontSize:'13px',fontWeight:'600',fontFamily:'inherit',transition:'all .15s',...x});
+  const pri={background:`linear-gradient(135deg,${C.gold},${C.rose})`,color:'white'};
+  const gho={background:'rgba(255,255,255,0.05)',color:C.mu,border:`1px solid ${C.br}`};
+  const cd={background:C.sf,border:`1px solid ${C.br}`,borderRadius:'14px',padding:'22px'};
+
+  function App(){
+    const [mode,setMode]=useState('home');
+    const [passage,setPassage]=useState(SAMPLE);
+    const [prompts,setPrompts]=useState(DEFAULT_PROMPTS);
+    const [students,setStudents]=useState([]);
+    const [sName,setSName]=useState('');
+    const [anns,setAnns]=useState([]);
+    const [resps,setResps]=useState({});
+    const [selType,setSelType]=useState(TYPES[0]);
+    const [pend,setPend]=useState(null);
+    const [noteIn,setNoteIn]=useState('');
+    const [showMod,setShowMod]=useState(false);
+    const [aiF,setAiF]=useState({});
+    const [loadAI,setLoadAI]=useState(null);
+    const [tab,setTab]=useState('annotate');
+    const [tTab,setTTab]=useState('setup');
+    const [tDraft,setTDraft]=useState(SAMPLE);
+    const [pDraft,setPDraft]=useState(DEFAULT_PROMPTS);
+    const [selStu,setSelStu]=useState(null);
+    const [toast,setToast]=useState(false);
+    const tRef=useRef(null);
+
+    useEffect(()=>{
+      if(!sName)return;
+      setStudents(prev=>{
+        const r={name:sName,annotations:anns,responses:resps,savedAt:new Date().toISOString()};
+        const i=prev.findIndex(s=>s.name===sName);
+        if(i>=0){const n=[...prev];n[i]=r;return n;}
+        return [...prev,r];
+      });
+    },[anns,resps]);
+
+    const handleSel=useCallback(()=>{
+      const s=window.getSelection();
+      if(!s||s.isCollapsed)return;
+      const r=s.getRangeAt(0);
+      const t=s.toString().trim();
+      if(!t||t.length<3)return;
+      const pre=document.createRange();
+      pre.selectNodeContents(tRef.current);
+      pre.setEnd(r.startContainer,r.startOffset);
+      const start=pre.toString().length;
+      setPend({start,end:start+t.length,text:t});
+      setShowMod(true);setNoteIn('');s.removeAllRanges();
+    },[]);
+
+    const confirmAnn=()=>{
+      if(!pend)return;
+      setAnns(p=>[...p,{...pend,id:Date.now(),type:selType.id,note:noteIn,color:selType.color,bg:selType.bg,emoji:selType.emoji,label:selType.label}]);
+      setShowMod(false);setPend(null);
+    };
+
+    const renderHL=(as,src)=>{
+      if(!as.length)return React.createElement('span',null,src);
+      const sorted=[...as].sort((a,b)=>a.start-b.start);
+      const segs=[];let cur=0;
+      sorted.forEach((a,i)=>{
+        if(a.start>cur)segs.push(React.createElement('span',{key:'t'+i},src.slice(cur,a.start)));
+        const s=Math.max(a.start,cur),e=a.end;
+        if(s<e)segs.push(React.createElement('mark',{key:'a'+i,style:{backgroundColor:a.bg,borderBottom:'2px solid '+a.color,borderRadius:'2px',padding:'1px 0'},title:a.label+': '+a.note},src.slice(s,e),React.createElement('sup',{style:{fontSize:'9px',color:a.color,marginLeft:'2px'}},a.emoji)));
+        cur=Math.max(cur,e);
+      });
+      if(cur<src.length)segs.push(React.createElement('span',{key:'last'},src.slice(cur)));
+      return React.createElement(React.Fragment,null,...segs);
+    };
+
+    const callAI=async(pr)=>{
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:pr}]})});
+      const d=await r.json();
+      return d.content?.find(b=>b.type==='text')?.text||'Great work!';
+    };
+
+    const getAnnFB=async(a)=>{
+      setLoadAI(a.id);
+      try{const t=await callAI(`You are a warm middle school literacy coach.\nPASSAGE: "${passage}"\nSELECTED: "${a.text}"\nTYPE: ${a.label}\nNOTE: "${a.note||'(none)'}"\nGive 2-3 sentences of encouraging feedback. Affirm one strength and ask one push-deeper question.`);setAiF(p=>({...p,[a.id]:t}));}
+      catch{setAiF(p=>({...p,[a.id]:'Great annotation!'}))}
+      setLoadAI(null);
+    };
+
+    const getRespFB=async(i)=>{
+      const k='resp_'+i;setLoadAI(k);
+      try{const t=await callAI(`You are a warm middle school ELA teacher.\nPASSAGE: "${passage}"\nPROMPT: "${prompts[i]}"\nSTUDENT: "${resps[i]||''}"\nRespond in 3-4 sentences. Affirm a strength. Push analysis deeper.`);setAiF(p=>({...p,[k]:t}));}
+      catch{setAiF(p=>({...p,['resp_'+i]:'Thoughtful — keep going!'}))}
+      setLoadAI(null);
+    };
+
+    const copyS=(s)=>{
+      const lines=[`ANNOTATION REPORT — ${s.name}`,`Date: ${new Date().toLocaleDateString()}`,'','── ANNOTATIONS ──'];
+      s.annotations.forEach((a,i)=>{lines.push(`\n[${i+1}] ${a.label}: "${a.text}"`);if(a.note)lines.push(`Note: ${a.note}`);});
+      lines.push('','── RESPONSES ──');
+      prompts.forEach((p,i)=>{lines.push(`\nPrompt ${i+1}: ${p}`);lines.push(`Response: ${s.responses[i]||'(not answered)'}`);});
+      navigator.clipboard?.writeText(lines.join('\n'));setToast(true);setTimeout(()=>setToast(false),2200);
+    };
+
+    if(mode==='home')return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
+        <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'14px 24px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)'}}>
+          <div style={{fontSize:18,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>📚 Annotate &amp; Understand</div>
+          <button style={{...btn(),...gho}} onClick={()=>showPage('home')}>← Back to Site</button>
+        </div>
+        <div style={{maxWidth:800,margin:'0 auto',padding:'56px 24px',textAlign:'center'}}>
+          <h1 style={{fontSize:'clamp(26px,5vw,48px)',fontWeight:700,lineHeight:1.1,marginBottom:14}}>Read Deeper.<br/><span style={{background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Think Further.</span></h1>
+          <p style={{fontSize:16,color:C.mu,maxWidth:480,margin:'0 auto 36px',lineHeight:1.7}}>An interactive annotation and close reading tool for middle school readers and the teachers who love them.</p>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,maxWidth:560,margin:'0 auto'}}>
+            {[{r:'student-name',icon:'✏️',t:"I'm a Student",d:"Highlight, tag, respond to prompts, and get AI coaching.",c:C.gold},{r:'teacher',icon:'🎓',t:"I'm a Teacher",d:"Set passages, edit prompts, view dashboard, export work.",c:C.rose}].map(x=>(
+              <div key={x.r} onClick={()=>setMode(x.r)} style={{...cd,cursor:'pointer',borderColor:x.c+'25',transition:'border-color .2s'}} onMouseEnter={e=>e.currentTarget.style.borderColor=x.c+'70'} onMouseLeave={e=>e.currentTarget.style.borderColor=x.c+'25'}>
+                <div style={{fontSize:30,marginBottom:10}}>{x.icon}</div>
+                <div style={{fontSize:17,fontWeight:700,marginBottom:6}}>{x.t}</div>
+                <div style={{fontSize:13,color:C.mu,lineHeight:1.6}}>{x.d}</div>
+                <div style={{marginTop:12,color:x.c,fontSize:13,fontWeight:600}}>Enter →</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+
+    if(mode==='student-name')return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}>
+        <div style={{...cd,maxWidth:400,width:'100%'}}>
+          <div style={{fontSize:30,marginBottom:10}}>✏️</div>
+          <h2 style={{fontSize:20,fontWeight:700,marginBottom:6}}>Welcome, Reader!</h2>
+          <p style={{color:C.mu,marginBottom:18,lineHeight:1.6,fontSize:14}}>Enter your first name to get started.</p>
+          <input value={sName} onChange={e=>setSName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&sName.trim()&&setMode('student')} placeholder="Your first name…" style={{width:'100%',padding:'10px 12px',background:'rgba(255,255,255,.04)',border:`1px solid ${C.br}`,borderRadius:8,color:C.tx,fontSize:15,fontFamily:'inherit',marginBottom:12,boxSizing:'border-box'}}/>
+          <button style={{...btn(),...pri,width:'100%',opacity:sName.trim()?1:.4}} disabled={!sName.trim()} onClick={()=>setMode('student')}>Start Annotating →</button>
+          <button style={{...btn(),...gho,width:'100%',marginTop:8}} onClick={()=>showPage('home')}>← Back to Site</button>
+        </div>
+      </div>
+    );
+
+    if(mode==='teacher')return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
+        <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'12px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:50,flexWrap:'wrap',gap:8}}>
+          <div style={{fontSize:15,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>🎓 Teacher Console</div>
+          <div style={{display:'flex',gap:7,flexWrap:'wrap'}}>
+            {[{id:'setup',l:'⚙️ Setup'},{id:'prompts',l:'💬 Prompts'},{id:'dashboard',l:'📊 Dashboard'}].map(t=>(
+              <button key={t.id} onClick={()=>setTTab(t.id)} style={{...btn(),...(tTab===t.id?pri:gho),fontSize:11,padding:'6px 11px'}}>{t.l}</button>
+            ))}
+            <button style={{...btn(),...gho,fontSize:11}} onClick={()=>showPage('home')}>← Site</button>
+          </div>
+        </div>
+        <div style={{maxWidth:880,margin:'0 auto',padding:'24px'}}>
+          {tTab==='setup'&&(
+            <div style={cd}>
+              <div style={{fontSize:14,fontWeight:600,color:C.gold,marginBottom:10}}>📄 Set Passage</div>
+              <textarea value={tDraft} onChange={e=>setTDraft(e.target.value)} rows={9} style={{width:'100%',padding:12,background:'rgba(255,255,255,.04)',border:`1px solid ${C.br}`,borderRadius:8,color:C.tx,fontSize:15,fontFamily:'Georgia,serif',lineHeight:1.8,resize:'vertical',marginBottom:12,boxSizing:'border-box'}}/>
+              <div style={{display:'flex',gap:10}}>
+                <button style={{...btn(),...pri}} onClick={()=>{setPassage(tDraft);alert('Passage saved!');}}>Save ✓</button>
+                <button style={{...btn(),...gho}} onClick={()=>setTDraft(SAMPLE)}>↺ Reset</button>
+              </div>
+            </div>
+          )}
+          {tTab==='prompts'&&(
+            <div style={cd}>
+              <div style={{fontSize:14,fontWeight:600,color:C.gold,marginBottom:14}}>💬 Edit Prompts</div>
+              {pDraft.map((p,i)=>(
+                <div key={i} style={{display:'flex',gap:10,marginBottom:10}}>
+                  <div style={{width:24,height:24,borderRadius:'50%',background:`linear-gradient(135deg,${C.gold},${C.rose})`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,flexShrink:0,marginTop:6}}>{i+1}</div>
+                  <textarea value={p} onChange={e=>{const d=[...pDraft];d[i]=e.target.value;setPDraft(d);}} rows={2} style={{flex:1,padding:'8px 10px',background:'rgba(255,255,255,.04)',border:`1px solid ${C.br}`,borderRadius:8,color:C.tx,fontSize:13,fontFamily:'Georgia,serif',lineHeight:1.6,resize:'none',boxSizing:'border-box'}}/>
+                </div>
+              ))}
+              <button style={{...btn(),...pri}} onClick={()=>{setPrompts(pDraft);alert('Prompts saved!');}}>Save ✓</button>
+            </div>
+          )}
+          {tTab==='dashboard'&&(
+            <div>
+              {students.length===0?(
+                <div style={{...cd,textAlign:'center',padding:'48px 24px'}}><div style={{fontSize:36,marginBottom:10}}>👩‍🏫</div><div style={{color:C.mu}}>No students yet.</div></div>
+              ):(
+                students.map(s=>(
+                  <div key={s.name} style={{...cd,marginBottom:10}}>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                      <div style={{fontWeight:600}}>{s.name} — {s.annotations.length} annotations, {Object.keys(s.responses).filter(k=>s.responses[k]?.trim()).length}/{prompts.length} prompts</div>
+                      <div style={{display:'flex',gap:7}}>
+                        <button style={{...btn(),...gho,fontSize:11,padding:'4px 9px'}} onClick={()=>setSelStu(selStu?.name===s.name?null:s)}>{selStu?.name===s.name?'Close':'View'}</button>
+                        <button style={{...btn(),...gho,fontSize:11,padding:'4px 9px'}} onClick={()=>copyS(s)}>📋</button>
+                      </div>
+                    </div>
+                    {selStu?.name===s.name&&(
+                      <div style={{marginTop:14}}>
+                        {s.annotations.map((a,i)=>{
+                          const tp=TYPES.find(t=>t.id===a.type);
+                          return <div key={i} style={{padding:'7px 10px',marginBottom:6,background:'rgba(255,255,255,.025)',borderRadius:7,borderLeft:`3px solid ${a.color}`,fontSize:12}}><span style={{color:a.color}}>{tp?.emoji} {tp?.label}</span>: "{a.text}"{a.note&&<span style={{color:C.mu}}> — {a.note}</span>}</div>;
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+
+    const prog={a:anns.length,r:Object.keys(resps).filter(k=>resps[k]?.trim()).length,t:[...new Set(anns.map(a=>a.type))].length};
+    return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
+        <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'12px 18px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:50,flexWrap:'wrap',gap:6}}>
+          <div style={{fontSize:14,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>📚 {sName?`Welcome, ${sName}!`:'Annotate & Understand'}</div>
+          <div style={{display:'flex',gap:5,flexWrap:'wrap'}}>
+            {[{id:'annotate',l:'📝 Annotate'},{id:'model',l:'🌟 Model'},{id:'prompts',l:'💬 Prompts'},{id:'progress',l:'📊 Progress'}].map(t=>(
+              <button key={t.id} onClick={()=>setTab(t.id)} style={{...btn(),...(tab===t.id?pri:gho),fontSize:11,padding:'5px 10px'}}>{t.l}</button>
+            ))}
+            <button style={{...btn(),...gho,fontSize:11,padding:'5px 9px'}} onClick={()=>copyS({name:sName,annotations:anns,responses:resps,savedAt:new Date().toISOString()})}>📋</button>
+            <button style={{...btn(),...gho,fontSize:11}} onClick={()=>showPage('home')}>← Site</button>
+          </div>
+        </div>
+        <div style={{maxWidth:1020,margin:'0 auto',padding:'18px'}}>
+          {tab==='annotate'&&(
+            <div style={{display:'grid',gridTemplateColumns:'1fr 270px',gap:14}}>
+              <div>
+                <div style={{...cd,marginBottom:12}}>
+                  <div style={{fontSize:12,color:C.mu,marginBottom:10,fontStyle:'italic'}}>💡 Select any text below to add an annotation.</div>
+                  <div ref={tRef} onMouseUp={handleSel} style={{lineHeight:'1.95',fontSize:15,color:C.tx,fontFamily:'Georgia,serif',cursor:'text',userSelect:'text'}}>{renderHL(anns,passage)}</div>
+                </div>
+                {anns.length>0&&(
+                  <div style={cd}>
+                    <div style={{fontSize:11,letterSpacing:'1.5px',textTransform:'uppercase',color:C.mu,marginBottom:12}}>Your Annotations ({anns.length})</div>
+                    {anns.map(a=>(
+                      <div key={a.id} style={{marginBottom:12,padding:'11px 13px',background:'rgba(255,255,255,.025)',borderRadius:9,borderLeft:`3px solid ${a.color}`}}>
+                        <div style={{display:'flex',justifyContent:'space-between',marginBottom:5}}>
+                          <span style={{fontSize:11,padding:'2px 8px',borderRadius:20,background:a.bg+'20',color:a.color,border:`1px solid ${a.color}30`,fontWeight:600}}>{a.emoji} {a.label}</span>
+                          <button style={{...btn(),...gho,fontSize:10,padding:'2px 7px'}} onClick={()=>setAnns(p=>p.filter(x=>x.id!==a.id))}>Remove</button>
+                        </div>
+                        <div style={{fontSize:13,fontStyle:'italic',color:C.mu,marginBottom:a.note?4:8}}>"{a.text}"</div>
+                        {a.note&&<div style={{fontSize:13,color:C.tx,marginBottom:8}}>{a.note}</div>}
+                        {aiF[a.id]?<div style={{background:'rgba(232,160,32,.07)',border:'1px solid rgba(232,160,32,.2)',borderRadius:7,padding:'9px 11px',fontSize:12,color:'#fcd34d',lineHeight:1.7}}>🤖 {aiF[a.id]}</div>
+                        :<button style={{...btn(),fontSize:11,padding:'4px 10px',background:'rgba(232,160,32,.08)',color:C.gold,border:'1px solid rgba(232,160,32,.2)'}} onClick={()=>getAnnFB(a)} disabled={loadAI===a.id}>{loadAI===a.id?'Thinking…':'🤖 Get AI Feedback'}</button>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
+                <div style={{...cd,marginBottom:12}}>
+                  <div style={{fontSize:11,letterSpacing:'1.5px',textTransform:'uppercase',color:C.mu,marginBottom:10}}>Annotation Type</div>
+                  {TYPES.map(tp=>(
+                    <div key={tp.id} onClick={()=>setSelType(tp)} style={{display:'flex',gap:8,padding:'7px 9px',borderRadius:8,cursor:'pointer',marginBottom:3,background:selType.id===tp.id?tp.bg+'18':'transparent',border:selType.id===tp.id?`1px solid ${tp.color}50`:'1px solid transparent',transition:'all .12s'}}>
+                      <span style={{fontSize:13}}>{tp.emoji}</span>
+                      <div><div style={{fontSize:11,fontWeight:600,color:selType.id===tp.id?tp.color:C.mu}}>{tp.label}</div><div style={{fontSize:10,color:'#475569'}}>{tp.desc}</div></div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{...cd,background:'rgba(232,70,106,.05)',borderColor:'rgba(232,70,106,.12)'}}>
+                  <div style={{fontSize:11,letterSpacing:'1.5px',textTransform:'uppercase',color:C.rose,marginBottom:8}}>Quick Stats</div>
+                  {[{l:'Annotations',v:prog.a},{l:'Types used',v:`${prog.t}/6`},{l:'Prompts done',v:`${prog.r}/${prompts.length}`}].map(s=>(
+                    <div key={s.l} style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:5}}><span style={{color:C.mu}}>{s.l}</span><span style={{fontWeight:700,color:C.rose}}>{s.v}</span></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          {tab==='model'&&(
+            <div style={{maxWidth:700,margin:'0 auto'}}>
+              <div style={cd}>
+                <h3 style={{fontSize:16,fontWeight:700,marginBottom:12,color:C.gold}}>🌟 Model Annotations</h3>
+                <div style={{lineHeight:'1.95',fontSize:15,fontFamily:'Georgia,serif',color:C.tx,marginBottom:14}}>{renderHL([{start:0,end:46,type:'connection',note:'Rosa Parks is a key Civil Rights figure.',color:'#8B5CF6',bg:'#EDE9FE',emoji:'🔗',label:'Connection'},{start:137,end:214,type:'inference',note:'Implies emotional exhaustion from systemic racism.',color:'#3B82F6',bg:'#DBEAFE',emoji:'💡',label:'Inference'}],passage)}</div>
+                <div style={{fontSize:13,color:C.mu,fontStyle:'italic'}}>Study how an expert reader annotates — notice the type chosen and the thinking expressed.</div>
+              </div>
+            </div>
+          )}
+          {tab==='prompts'&&(
+            <div style={{maxWidth:680,margin:'0 auto'}}>
+              {prompts.map((pr,i)=>{
+                const k='resp_'+i;
+                return(
+                  <div key={i} style={{...cd,marginBottom:12}}>
+                    <div style={{display:'flex',gap:9,marginBottom:10}}>
+                      <div style={{width:22,height:22,borderRadius:'50%',background:`linear-gradient(135deg,${C.gold},${C.rose})`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,flexShrink:0}}>{i+1}</div>
+                      <div style={{fontSize:13,lineHeight:1.6,fontStyle:'italic',color:C.tx}}>{pr}</div>
+                    </div>
+                    <textarea value={resps[i]||''} onChange={e=>setResps(p=>({...p,[i]:e.target.value}))} placeholder="Write your response here…" rows={4} style={{width:'100%',padding:'9px 11px',background:'rgba(255,255,255,.04)',border:`1px solid ${C.br}`,borderRadius:8,color:C.tx,fontSize:13,fontFamily:'Georgia,serif',lineHeight:1.7,resize:'vertical',marginBottom:9,boxSizing:'border-box'}}/>
+                    {aiF[k]?<div style={{background:'rgba(232,160,32,.07)',border:'1px solid rgba(232,160,32,.2)',borderRadius:7,padding:'9px 11px',fontSize:12,color:'#fcd34d',lineHeight:1.7}}>🤖 {aiF[k]}</div>
+                    :<button style={{...btn(),fontSize:11,padding:'4px 10px',background:'rgba(232,160,32,.08)',color:C.gold,border:'1px solid rgba(232,160,32,.2)',opacity:resps[i]?.trim()?1:.4}} disabled={!resps[i]?.trim()||loadAI===k} onClick={()=>getRespFB(i)}>{loadAI===k?'Thinking…':'🤖 Get AI Feedback'}</button>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {tab==='progress'&&(
+            <div style={{maxWidth:660,margin:'0 auto'}}>
+              <h2 style={{fontSize:19,fontWeight:700,marginBottom:18}}>📊 {sName?`${sName}'s`:'Your'} Progress</h2>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12,marginBottom:18}}>
+                {[{l:'Annotations',v:prog.a,c:C.gold},{l:'Types Used',v:`${prog.t}/6`,c:'#8b5cf6'},{l:'Prompts',v:`${prog.r}/${prompts.length}`,c:'#10b981'}].map(s=>(
+                  <div key={s.l} style={{...cd,textAlign:'center'}}><div style={{fontSize:26,fontWeight:700,color:s.c}}>{s.v}</div><div style={{fontSize:11,color:C.mu,marginTop:2}}>{s.l}</div></div>
+                ))}
+              </div>
+              <div style={cd}>
+                {TYPES.map(tp=>{
+                  const cnt=anns.filter(a=>a.type===tp.id).length;
+                  const pct=anns.length?Math.round((cnt/anns.length)*100):0;
+                  return(
+                    <div key={tp.id} style={{marginBottom:9}}>
+                      <div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:3}}><span>{tp.emoji} {tp.label}</span><span style={{color:tp.color,fontWeight:600}}>{cnt}</span></div>
+                      <div style={{height:4,background:'rgba(255,255,255,.05)',borderRadius:3,overflow:'hidden'}}><div style={{height:'100%',width:`${pct}%`,background:tp.color,borderRadius:3,transition:'width .5s'}}/></div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+        {showMod&&(
+          <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.75)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:200,padding:20}}>
+            <div style={{background:'#111827',border:`1px solid ${C.br}`,borderRadius:16,padding:26,maxWidth:500,width:'100%'}}>
+              <h3 style={{fontSize:16,fontWeight:700,marginBottom:5}}>Add Your Annotation</h3>
+              <div style={{fontSize:13,color:C.mu,fontStyle:'italic',marginBottom:14}}>"{pend?.text}"</div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6,marginBottom:12}}>
+                {TYPES.map(tp=>(
+                  <div key={tp.id} onClick={()=>setSelType(tp)} style={{padding:'7px 5px',borderRadius:7,cursor:'pointer',textAlign:'center',background:selType.id===tp.id?tp.bg+'18':'rgba(255,255,255,.03)',border:selType.id===tp.id?`2px solid ${tp.color}`:`2px solid ${C.br}`,transition:'all .12s'}}>
+                    <div style={{fontSize:15}}>{tp.emoji}</div>
+                    <div style={{fontSize:10,color:selType.id===tp.id?tp.color:C.mu,fontWeight:600,marginTop:2}}>{tp.label}</div>
+                  </div>
+                ))}
+              </div>
+              <textarea value={noteIn} onChange={e=>setNoteIn(e.target.value)} autoFocus placeholder="What are you noticing?" rows={3} style={{width:'100%',padding:'9px 11px',background:'rgba(255,255,255,.06)',border:`1px solid ${C.br}`,borderRadius:8,color:'white',fontSize:13,fontFamily:'Georgia,serif',lineHeight:1.7,resize:'none',marginBottom:12,boxSizing:'border-box'}}/>
+              <div style={{display:'flex',gap:9}}>
+                <button style={{...btn(),...pri,flex:1}} onClick={confirmAnn}>Save ✓</button>
+                <button style={{...btn(),...gho}} onClick={()=>setShowMod(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+        {toast&&<div style={{position:'fixed',bottom:24,left:'50%',transform:'translateX(-50%)',background:'#1e293b',border:`1px solid ${C.br}`,borderRadius:10,padding:'11px 22px',fontSize:13,color:'#34d399',zIndex:300}}>✓ Copied</div>}
+      </div>
+    );
   }
+  ReactDOM.createRoot(document.getElementById('annotate-root')).render(React.createElement(App));
+}
+</script>
 
-  // Show home by default
-  showPage('home');
+<script type="text/babel" data-presets="react">
+function loadGuide() {
+  const CATS=[
+    {id:"comprehension",label:"Comprehension",emoji:"🔍",color:"#3B82F6"},
+    {id:"vocabulary",label:"Vocabulary",emoji:"📖",color:"#EF4444"},
+    {id:"inference",label:"Inference",emoji:"💡",color:"#F59E0B"},
+    {id:"author",label:"Author's Craft",emoji:"✍️",color:"#8B5CF6"},
+    {id:"theme",label:"Theme & Big Ideas",emoji:"🎯",color:"#EC4899"},
+    {id:"connection",label:"Connections",emoji:"🔗",color:"#10B981"},
+    {id:"evidence",label:"Text Evidence",emoji:"⭐",color:"#06B6D4"},
+    {id:"critical",label:"Critical Thinking",emoji:"🧠",color:"#F97316"},
+  ];
+  const {useState,useRef}=React;
+  function Guide(){
+    const [role,setRole]=useState(null);
+    const [mode,setMode]=useState(null);
+    const [txt,setTxt]=useState('');
+    const [imgD,setImgD]=useState(null);
+    const [imgP,setImgP]=useState(null);
+    const [guide,setGuide]=useState(null);
+    const [loading,setLoading]=useState(false);
+    const [err,setErr]=useState(null);
+    const [copied,setCopied]=useState(false);
+    const [drag,setDrag]=useState(false);
+    const [selC,setSelC]=useState(CATS.map(c=>c.id));
+    const fRef=useRef(null);
+    const cRef=useRef(null);
+
+    const procFile=(f)=>{
+      if(!f||!f.type.startsWith('image/'))return;
+      const r=new FileReader();
+      r.onload=(e)=>{const full=e.target.result;setImgD({base64:full.split(',')[1],mediaType:f.type});setImgP(full);setMode('photo');};
+      r.readAsDataURL(f);
+    };
+    const togC=(id)=>setSelC(p=>p.includes(id)?(p.length>1?p.filter(c=>c!==id):p):[...p,id]);
+
+    const gen=async()=>{
+      if(!txt.trim()&&!imgD)return;
+      setLoading(true);setErr(null);setGuide(null);
+      const cns=CATS.filter(c=>selC.includes(c.id)).map(c=>c.label).join(', ');
+      const sys=`You are an expert middle school ELA teacher (Lit and Love LLC). Generate an annotation guide. Respond ONLY with valid JSON:\n{"title":"short title","summary":"1-2 sentence overview","readingLevel":"level","categories":[{"id":"id","label":"label","emoji":"emoji","questions":[{"q":"question","tip":"short tip"}]}]}\nGenerate 3-5 questions per category. Only include: ${cns}. IDs: comprehension, vocabulary, inference, author, theme, connection, evidence, critical.`;
+      try{
+        const uc=imgD?[{type:'image',source:{type:'base64',media_type:imgD.mediaType,data:imgD.base64}},{type:'text',text:`Generate annotation guide. Role: ${role}.`}]:`Generate annotation guide. Role: ${role}.\n\nTEXT:\n${txt}`;
+        const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:uc}]})});
+        const d=await res.json();
+        const raw=d.content?.find(b=>b.type==='text')?.text||'';
+        setGuide(JSON.parse(raw.replace(/```json|```/g,'').trim()));
+      }catch{setErr('Something went wrong. Please try again.');}
+      setLoading(false);
+    };
+
+    const expTxt=()=>{
+      if(!guide)return'';
+      const lines=['='.repeat(60),`ANNOTATION GUIDE: ${guide.title?.toUpperCase()}`,'Lit and Love LLC','='.repeat(60),'',guide.summary||'',''];
+      (guide.categories||[]).forEach(cat=>{lines.push(`── ${cat.emoji} ${cat.label.toUpperCase()} ──`);(cat.questions||[]).forEach((q,i)=>{lines.push(`  ${i+1}. ${q.q}`);if(q.tip)lines.push(`     💬 ${q.tip}`);});lines.push('');});
+      return lines.join('\n');
+    };
+
+    const C={bg:'#08090f',sf:'rgba(255,255,255,.03)',br:'rgba(255,255,255,.07)',gold:'#d4a017',mu:'#64748b',tx:'#e2e8f0'};
+    const RS=role==='teacher'?{ac:'#fb923c',gr:'linear-gradient(135deg,#f97316,#ec4899)'}:{ac:'#38bdf8',gr:'linear-gradient(135deg,#0ea5e9,#6366f1)'};
+    const btn=(x={})=>({padding:'9px 18px',borderRadius:'8px',border:'none',cursor:'pointer',fontSize:'13px',fontWeight:'600',fontFamily:'inherit',transition:'all .15s',...x});
+    const gho={background:'rgba(255,255,255,.05)',color:C.mu,border:`1px solid ${C.br}`};
+
+    if(!role)return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:40,textAlign:'center'}}>
+        <div style={{fontSize:44,marginBottom:12}}>🔎</div>
+        <h1 style={{fontSize:'clamp(24px,5vw,42px)',fontWeight:700,lineHeight:1.1,marginBottom:12}}>Upload any text.<br/><span style={{background:'linear-gradient(90deg,#38bdf8,#818cf8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Get your guide.</span></h1>
+        <p style={{fontSize:15,color:C.mu,maxWidth:440,margin:'0 auto 32px',lineHeight:1.7}}>Take a photo of anything you're reading — or paste the text. Get an instant annotation question guide.</p>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,maxWidth:460,width:'100%',marginBottom:20}}>
+          {[{id:'student',icon:'✏️',t:"I'm a Student",d:"Get questions to guide your own annotations."},{id:'teacher',icon:'🎓',t:"I'm a Teacher",d:"Get a guide to use with your class."}].map(r=>(
+            <div key={r.id} onClick={()=>setRole(r.id)} style={{background:C.sf,border:`1px solid ${C.br}`,borderRadius:14,padding:'22px 18px',cursor:'pointer',textAlign:'left',transition:'all .2s'}} onMouseEnter={e=>e.currentTarget.style.borderColor='#38bdf8'} onMouseLeave={e=>e.currentTarget.style.borderColor=C.br}>
+              <div style={{fontSize:28,marginBottom:8}}>{r.icon}</div>
+              <div style={{fontSize:16,fontWeight:700,marginBottom:5}}>{r.t}</div>
+              <div style={{fontSize:13,color:C.mu,lineHeight:1.6}}>{r.d}</div>
+            </div>
+          ))}
+        </div>
+        <button onClick={()=>showPage('home')} style={{...btn(),...gho}}>← Back to Site</button>
+      </div>
+    );
+
+    if(!guide)return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
+        <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'13px 22px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)'}}>
+          <div style={{fontSize:15,fontWeight:700,background:'linear-gradient(90deg,#38bdf8,#818cf8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>🔎 Reading Guide Generator</div>
+          <div style={{display:'flex',gap:7}}>
+            <button style={{...btn(),...gho}} onClick={()=>setRole(null)}>← Change Role</button>
+            <button style={{...btn(),...gho}} onClick={()=>showPage('home')}>← Site</button>
+          </div>
+        </div>
+        <div style={{maxWidth:740,margin:'0 auto',padding:'28px 18px'}}>
+          <h2 style={{fontSize:20,fontWeight:700,marginBottom:6}}>Add your text</h2>
+          <p style={{color:C.mu,fontSize:13,marginBottom:20,lineHeight:1.6}}>Take a photo, upload an image, or paste text. Your guide will be ready in seconds.</p>
+          <div style={{display:'flex',gap:7,marginBottom:16}}>
+            {[{id:'text',l:'⌨️ Type or Paste'},{id:'photo',l:'📷 Photo or Image'}].map(m=>(
+              <button key={m.id} onClick={()=>setMode(m.id)} style={{...btn(),background:mode===m.id?RS.gr:'rgba(255,255,255,.05)',color:mode===m.id?'white':C.mu}}>{m.l}</button>
+            ))}
+          </div>
+          {mode==='text'&&<textarea value={txt} onChange={e=>setTxt(e.target.value)} placeholder="Paste or type the text you want to annotate here…" rows={10} style={{width:'100%',padding:13,background:'rgba(255,255,255,.04)',border:`1px solid ${C.br}`,borderRadius:9,color:C.tx,fontSize:14,fontFamily:'Georgia,serif',lineHeight:1.8,resize:'vertical',marginBottom:16,boxSizing:'border-box'}}/>}
+          {mode==='photo'&&!imgP&&(
+            <div onDragOver={e=>{e.preventDefault();setDrag(true)}} onDragLeave={()=>setDrag(false)} onDrop={e=>{e.preventDefault();setDrag(false);procFile(e.dataTransfer.files[0])}} onClick={()=>fRef.current?.click()} style={{border:`2px dashed ${drag?RS.ac:C.br}`,borderRadius:12,padding:'44px 22px',textAlign:'center',cursor:'pointer',marginBottom:16}}>
+              <div style={{fontSize:38,marginBottom:10}}>📷</div>
+              <div style={{fontSize:14,fontWeight:600,marginBottom:7}}>Drop an image here</div>
+              <div style={{fontSize:12,color:C.mu,marginBottom:16}}>or click to upload a photo of your text</div>
+              <div style={{display:'flex',gap:9,justifyContent:'center'}}>
+                <button onClick={e=>{e.stopPropagation();fRef.current?.click()}} style={{...btn(),background:RS.gr,color:'white'}}>Choose File</button>
+                <button onClick={e=>{e.stopPropagation();cRef.current?.click()}} style={{...btn(),...gho}}>📱 Camera</button>
+              </div>
+              <input ref={fRef} type="file" accept="image/*" onChange={e=>procFile(e.target.files[0])} style={{display:'none'}}/>
+              <input ref={cRef} type="file" accept="image/*" capture="environment" onChange={e=>procFile(e.target.files[0])} style={{display:'none'}}/>
+            </div>
+          )}
+          {mode==='photo'&&imgP&&(
+            <div style={{background:'rgba(255,255,255,.03)',border:`1px solid ${C.br}`,borderRadius:11,padding:13,marginBottom:16}}>
+              <img src={imgP} alt="Uploaded" style={{width:'100%',maxHeight:260,objectFit:'contain',borderRadius:7,marginBottom:9}}/>
+              <button onClick={()=>{setImgD(null);setImgP(null);}} style={{...btn(),background:'rgba(239,68,68,.12)',color:'#f87171',border:'1px solid rgba(239,68,68,.2)'}}>✕ Remove</button>
+            </div>
+          )}
+          {(txt.trim()||imgP)&&(
+            <div style={{background:'rgba(255,255,255,.025)',border:`1px solid ${C.br}`,borderRadius:11,padding:'14px 16px',marginBottom:16}}>
+              <div style={{fontSize:11,letterSpacing:'2px',textTransform:'uppercase',color:C.mu,marginBottom:9}}>Question Categories</div>
+              <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                {CATS.map(cat=>{
+                  const on=selC.includes(cat.id);
+                  return <button key={cat.id} onClick={()=>togC(cat.id)} style={{padding:'5px 11px',borderRadius:20,border:`1px solid ${on?cat.color+'60':C.br}`,background:on?cat.color+'18':'rgba(255,255,255,.03)',color:on?cat.color:C.mu,fontSize:11,fontWeight:600,cursor:'pointer',fontFamily:'inherit'}}>{cat.emoji} {cat.label}</button>;
+                })}
+              </div>
+            </div>
+          )}
+          {(txt.trim()||imgP)&&(
+            <button onClick={gen} disabled={loading} style={{...btn(),width:'100%',padding:'13px 18px',background:loading?'rgba(255,255,255,.06)':RS.gr,color:loading?C.mu:'white',fontSize:14,fontWeight:700,borderRadius:11}}>
+              {loading?'⟳ Generating your guide…':'✨ Generate Annotation Guide'}
+            </button>
+          )}
+          {err&&<div style={{marginTop:12,padding:'9px 13px',background:'rgba(239,68,68,.08)',border:'1px solid rgba(239,68,68,.2)',borderRadius:8,color:'#f87171',fontSize:13}}>{err}</div>}
+        </div>
+      </div>
+    );
+
+    return(
+      <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
+        <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'13px 22px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)'}}>
+          <div style={{fontSize:15,fontWeight:700,background:'linear-gradient(90deg,#38bdf8,#818cf8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>🔎 Your Annotation Guide</div>
+          <div style={{display:'flex',gap:7}}>
+            <button onClick={()=>{navigator.clipboard?.writeText(expTxt());setCopied(true);setTimeout(()=>setCopied(false),2200);}} style={{...btn(),background:copied?'rgba(16,185,129,.15)':RS.gr,color:copied?'#34d399':'white',border:copied?'1px solid rgba(16,185,129,.3)':'none'}}>{copied?'✓ Copied!':'📋 Copy'}</button>
+            <button onClick={()=>setGuide(null)} style={{...btn(),...gho}}>↺ New</button>
+            <button onClick={()=>showPage('home')} style={{...btn(),...gho}}>← Site</button>
+          </div>
+        </div>
+        <div style={{maxWidth:800,margin:'0 auto',padding:'24px 18px'}}>
+          <div style={{background:RS.ac+'18',border:`1px solid ${RS.ac}30`,borderRadius:13,padding:'20px 22px',marginBottom:20}}>
+            <div style={{fontSize:11,letterSpacing:'2px',textTransform:'uppercase',color:RS.ac,marginBottom:7}}>Your Annotation Guide</div>
+            <h2 style={{fontSize:19,fontWeight:700,marginBottom:7}}>{guide.title}</h2>
+            {guide.summary&&<p style={{fontSize:13,color:C.mu,lineHeight:1.7,marginBottom:7}}>{guide.summary}</p>}
+            {guide.readingLevel&&<span style={{fontSize:11,padding:'3px 9px',borderRadius:20,background:RS.ac+'15',color:RS.ac,border:`1px solid ${RS.ac}30`}}>📊 {guide.readingLevel}</span>}
+          </div>
+          {(guide.categories||[]).map(cat=>{
+            const meta=CATS.find(c=>c.id===cat.id)||{};
+            const col=meta.color||'#94a3b8';
+            return(
+              <div key={cat.id} style={{background:'rgba(255,255,255,.025)',border:`1px solid ${col}25`,borderRadius:12,marginBottom:12,overflow:'hidden'}}>
+                <div style={{background:col+'12',borderBottom:`1px solid ${col}20`,padding:'11px 16px',display:'flex',alignItems:'center',gap:9}}>
+                  <span style={{fontSize:17}}>{cat.emoji}</span>
+                  <div style={{fontSize:13,fontWeight:700,color:col}}>{cat.label}</div>
+                  <span style={{marginLeft:'auto',fontSize:11,color:'#475569'}}>{cat.questions?.length} questions</span>
+                </div>
+                <div style={{padding:'13px 16px'}}>
+                  {(cat.questions||[]).map((q,i)=>(
+                    <div key={i} style={{display:'flex',gap:9,marginBottom:i<cat.questions.length-1?12:0,paddingBottom:i<cat.questions.length-1?12:0,borderBottom:i<cat.questions.length-1?'1px solid rgba(255,255,255,.04)':'none'}}>
+                      <div style={{width:20,height:20,borderRadius:'50%',background:col+'20',border:`1px solid ${col}40`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:700,color:col,flexShrink:0,marginTop:2}}>{i+1}</div>
+                      <div>
+                        <div style={{fontSize:13,lineHeight:1.65,color:C.tx,marginBottom:q.tip?3:0}}>{q.q}</div>
+                        {q.tip&&<div style={{fontSize:11,color:'#475569',fontStyle:'italic'}}>💬 {q.tip}</div>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('guide-root')).render(React.createElement(Guide));
+}
 </script>
 </body>
 </html>
