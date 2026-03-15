@@ -308,22 +308,22 @@ function loadAnnotate() {
     };
 
     const callAI=async(pr)=>{
-      const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:pr}]})});
+      const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:pr}]})});
       const d=await r.json();
       return d.content?.find(b=>b.type==='text')?.text||'Great work!';
     };
 
     const getAnnFB=async(a)=>{
       setLoadAI(a.id);
-      try{const t=await callAI(`You are a warm middle school literacy coach.\nPASSAGE: "${passage}"\nSELECTED: "${a.text}"\nTYPE: ${a.label}\nNOTE: "${a.note||'(none)'}"\nGive 2-3 sentences of encouraging feedback. Affirm one strength and ask one push-deeper question.`);setAiF(p=>({...p,[a.id]:t}));}
-      catch{setAiF(p=>({...p,[a.id]:'Great annotation!'}))}
+      try{const t=await callAI(`You are a rigorous, warm literacy coach working with middle school students. A student has annotated a passage and you are giving them detailed written feedback — the kind a great teacher writes thoughtfully.\n\nPASSAGE:\n"${passage}"\n\nSTUDENT SELECTED: "${a.text}"\nANNOTATION TYPE: ${a.label}\nSTUDENT NOTE: "${a.note||'(none provided)'}"\n\nWrite detailed feedback in 4-6 sentences. Do ALL of the following:\n1. Name exactly what the student did well — be specific about their word choice or thinking, not generic praise.\n2. Explain WHY their annotation type is a strong or interesting choice for this specific piece of text.\n3. Connect their annotation to something larger — a theme, the author's craft, historical or social context, or the passage structure.\n4. Push their thinking with one specific, meaty question they can sit with — not yes/no, but one that requires interpretation, inference, or evaluation.\n5. If they left no note, gently model what a strong note for this annotation type could look like and invite them to try.\n\nTone: encouraging, scholarly, conversational — like a trusted teacher who takes this student seriously. Write in flowing sentences, no bullet points.`);setAiF(p=>({...p,[a.id]:t}));}
+      catch{setAiF(p=>({...p,[a.id]:'Great annotation — keep pushing your thinking!'}))}
       setLoadAI(null);
     };
 
     const getRespFB=async(i)=>{
       const k='resp_'+i;setLoadAI(k);
-      try{const t=await callAI(`You are a warm middle school ELA teacher.\nPASSAGE: "${passage}"\nPROMPT: "${prompts[i]}"\nSTUDENT: "${resps[i]||''}"\nRespond in 3-4 sentences. Affirm a strength. Push analysis deeper.`);setAiF(p=>({...p,[k]:t}));}
-      catch{setAiF(p=>({...p,['resp_'+i]:'Thoughtful — keep going!'}))}
+      try{const t=await callAI(`You are a rigorous, warm middle school ELA teacher giving detailed written feedback on a student's close reading response.\n\nPASSAGE:\n"${passage}"\n\nCLOSE READING PROMPT: "${prompts[i]}"\nSTUDENT RESPONSE: "${resps[i]||'(no response yet)'}"\n\nWrite detailed feedback in 5-7 sentences. Do ALL of the following:\n1. Affirm one specific strength in the student's response — name the exact phrase or idea that shows strong thinking.\n2. Identify what the student is doing as a reader — are they summarizing, inferring, evaluating, connecting? Name it and validate it.\n3. Push their analysis further: point to a specific word, sentence, or moment in the passage they haven't addressed yet that could deepen their answer.\n4. Offer one concrete next step — a specific lens, question, or strategy they could use to revise or extend their thinking.\n5. If the response is thin or off-track, redirect with warmth — acknowledge what they attempted and show them a more productive path.\n\nTone: like a writing workshop teacher — specific, honest, encouraging, and intellectually serious. Write in flowing sentences, no bullet points.`);setAiF(p=>({...p,[k]:t}));}
+      catch{setAiF(p=>({...p,['resp_'+i]:'Thoughtful response — keep going!'}))}
       setLoadAI(null);
     };
 
@@ -613,10 +613,10 @@ function loadGuide() {
       if(!txt.trim()&&!imgD)return;
       setLoading(true);setErr(null);setGuide(null);
       const cns=CATS.filter(c=>selC.includes(c.id)).map(c=>c.label).join(', ');
-      const sys=`You are an expert middle school ELA teacher (Lit and Love LLC). Generate an annotation guide. Respond ONLY with valid JSON:\n{"title":"short title","summary":"1-2 sentence overview","readingLevel":"level","categories":[{"id":"id","label":"label","emoji":"emoji","questions":[{"q":"question","tip":"short tip"}]}]}\nGenerate 3-5 questions per category. Only include: ${cns}. IDs: comprehension, vocabulary, inference, author, theme, connection, evidence, critical.`;
+      const sys=`You are an expert middle school ELA teacher and literacy coach at Lit and Love LLC. Your job is to generate a rich, rigorous annotation guide that pushes students to think deeply — not just recall.\n\nRules for generating questions:\n- Every question must require interpretation, inference, or evaluation — never simple recall or yes/no answers\n- Questions must be specific to THIS text, not generic — reference actual words, phrases, or moments from the passage\n- Each question should feel like something a thoughtful teacher would actually ask in a seminar\n- Tips should name a concrete annotation strategy, not just restate the question\n- For teacher role: add a brief discussion or coaching note to each question\n- For student role: use direct "you" language that feels personal and inviting\n\nRespond ONLY with valid JSON, no markdown, no preamble:\n{"title":"evocative short title (max 8 words)","summary":"2-3 sentence overview of what this text is about and why it matters","readingLevel":"estimated grade level and text complexity","categories":[{"id":"category_id","label":"Category Label","emoji":"emoji","questions":[{"q":"rich, text-specific question","tip":"concrete annotation strategy tip (max 15 words)"}]}]}\n\nGenerate 4-5 questions per category. Make each question genuinely distinct — different angles, different depths. Only include these categories: ${cns}. Category IDs must match exactly: comprehension, vocabulary, inference, author, theme, connection, evidence, critical.`;
       try{
-        const uc=imgD?[{type:'image',source:{type:'base64',media_type:imgD.mediaType,data:imgD.base64}},{type:'text',text:`Generate annotation guide. Role: ${role}.`}]:`Generate annotation guide. Role: ${role}.\n\nTEXT:\n${txt}`;
-        const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:uc}]})});
+        const uc=imgD?[{type:'image',source:{type:'base64',media_type:imgD.mediaType,data:imgD.base64}},{type:'text',text:`Generate a detailed annotation guide for the text in this image. The reader's role is: ${role}. Make every question specific to what you can actually read in this text.`}]:`Generate a detailed annotation guide for this text. The reader's role is: ${role}. Make every question specific to words and moments in this actual text.\n\nTEXT:\n${txt}`;
+        const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:sys,messages:[{role:'user',content:uc}]})});
         const d=await res.json();
         const raw=d.content?.find(b=>b.type==='text')?.text||'';
         setGuide(JSON.parse(raw.replace(/```json|```/g,'').trim()));
