@@ -243,6 +243,7 @@ function loadAnnotate() {
 
   function App(){
     const [mode,setMode]=useState('home');
+    const [role,setRole]=useState(null);
     const [passage,setPassage]=useState(SAMPLE);
     const [prompts,setPrompts]=useState(DEFAULT_PROMPTS);
     const [students,setStudents]=useState([]);
@@ -262,6 +263,7 @@ function loadAnnotate() {
     const [selStu,setSelStu]=useState(null);
     const [toast,setToast]=useState(false);
     const tRef=useRef(null);
+    const changeRole=()=>{setRole(null);setMode('home');setAnns([]);setResps({});setAiF({});setSName('');setTab('annotate');};
 
     useEffect(()=>{
       if(!sName)return;
@@ -346,7 +348,7 @@ function loadAnnotate() {
           <p style={{fontSize:16,color:C.mu,maxWidth:480,margin:'0 auto 36px',lineHeight:1.7}}>An interactive annotation and close reading tool for middle school readers and the teachers who love them.</p>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,maxWidth:560,margin:'0 auto'}}>
             {[{r:'student-name',icon:'✏️',t:"I'm a Student",d:"Highlight, tag, respond to prompts, and get AI coaching.",c:C.gold},{r:'teacher',icon:'🎓',t:"I'm a Teacher",d:"Set passages, edit prompts, view dashboard, export work.",c:C.rose}].map(x=>(
-              <div key={x.r} onClick={()=>setMode(x.r)} style={{...cd,cursor:'pointer',borderColor:x.c+'25',transition:'border-color .2s'}} onMouseEnter={e=>e.currentTarget.style.borderColor=x.c+'70'} onMouseLeave={e=>e.currentTarget.style.borderColor=x.c+'25'}>
+              <div key={x.r} onClick={()=>{setRole(x.r==='teacher'?'teacher':'student');setMode(x.r);}} style={{...cd,cursor:'pointer',borderColor:x.c+'25',transition:'border-color .2s'}} onMouseEnter={e=>e.currentTarget.style.borderColor=x.c+'70'} onMouseLeave={e=>e.currentTarget.style.borderColor=x.c+'25'}>
                 <div style={{fontSize:30,marginBottom:10}}>{x.icon}</div>
                 <div style={{fontSize:17,fontWeight:700,marginBottom:6}}>{x.t}</div>
                 <div style={{fontSize:13,color:C.mu,lineHeight:1.6}}>{x.d}</div>
@@ -366,7 +368,8 @@ function loadAnnotate() {
           <p style={{color:C.mu,marginBottom:18,lineHeight:1.6,fontSize:14}}>Enter your first name to get started.</p>
           <input value={sName} onChange={e=>setSName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&sName.trim()&&setMode('student')} placeholder="Your first name…" style={{width:'100%',padding:'10px 12px',background:'rgba(255,255,255,.04)',border:`1px solid ${C.br}`,borderRadius:8,color:C.tx,fontSize:15,fontFamily:'inherit',marginBottom:12,boxSizing:'border-box'}}/>
           <button style={{...btn(),...pri,width:'100%',opacity:sName.trim()?1:.4}} disabled={!sName.trim()} onClick={()=>setMode('student')}>Start Annotating →</button>
-          <button style={{...btn(),...gho,width:'100%',marginTop:8}} onClick={()=>showPage('home')}>← Back to Site</button>
+          <button style={{...btn(),...gho,width:'100%',marginTop:8}} onClick={changeRole}>⇄ Change Role</button>
+          <button style={{...btn(),...gho,width:'100%',marginTop:6}} onClick={()=>showPage('home')}>← Back to Site</button>
         </div>
       </div>
     );
@@ -374,11 +377,15 @@ function loadAnnotate() {
     if(mode==='teacher')return(
       <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
         <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'12px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:50,flexWrap:'wrap',gap:8}}>
-          <div style={{fontSize:15,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>🎓 Teacher Console</div>
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <div style={{fontSize:15,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>🎓 Teacher Console</div>
+            <span style={{fontSize:10,padding:'3px 8px',borderRadius:20,background:'rgba(232,70,106,.15)',color:C.rose,border:'1px solid rgba(232,70,106,.3)',fontWeight:600}}>🎓 Teacher</span>
+          </div>
           <div style={{display:'flex',gap:7,flexWrap:'wrap'}}>
             {[{id:'setup',l:'⚙️ Setup'},{id:'prompts',l:'💬 Prompts'},{id:'dashboard',l:'📊 Dashboard'}].map(t=>(
               <button key={t.id} onClick={()=>setTTab(t.id)} style={{...btn(),...(tTab===t.id?pri:gho),fontSize:11,padding:'6px 11px'}}>{t.l}</button>
             ))}
+            <button style={{...btn(),...gho,fontSize:11}} onClick={changeRole}>⇄ Change Role</button>
             <button style={{...btn(),...gho,fontSize:11}} onClick={()=>showPage('home')}>← Site</button>
           </div>
         </div>
@@ -440,12 +447,16 @@ function loadAnnotate() {
     return(
       <div style={{minHeight:'100vh',background:C.bg,fontFamily:'Georgia,serif',color:C.tx}}>
         <div style={{background:'rgba(0,0,0,.4)',borderBottom:`1px solid ${C.br}`,padding:'12px 18px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:50,flexWrap:'wrap',gap:6}}>
-          <div style={{fontSize:14,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>📚 {sName?`Welcome, ${sName}!`:'Annotate & Understand'}</div>
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <div style={{fontSize:14,fontWeight:700,background:`linear-gradient(90deg,${C.gold},${C.rose})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>📚 {sName?`Welcome, ${sName}!`:'Annotate & Understand'}</div>
+            <span style={{fontSize:10,padding:'3px 8px',borderRadius:20,background:'rgba(232,160,23,.15)',color:C.gold,border:'1px solid rgba(232,160,23,.3)',fontWeight:600}}>✏️ Student</span>
+          </div>
           <div style={{display:'flex',gap:5,flexWrap:'wrap'}}>
             {[{id:'annotate',l:'📝 Annotate'},{id:'model',l:'🌟 Model'},{id:'prompts',l:'💬 Prompts'},{id:'progress',l:'📊 Progress'}].map(t=>(
               <button key={t.id} onClick={()=>setTab(t.id)} style={{...btn(),...(tab===t.id?pri:gho),fontSize:11,padding:'5px 10px'}}>{t.l}</button>
             ))}
             <button style={{...btn(),...gho,fontSize:11,padding:'5px 9px'}} onClick={()=>copyS({name:sName,annotations:anns,responses:resps,savedAt:new Date().toISOString()})}>📋</button>
+            <button style={{...btn(),...gho,fontSize:11}} onClick={changeRole}>⇄ Change Role</button>
             <button style={{...btn(),...gho,fontSize:11}} onClick={()=>showPage('home')}>← Site</button>
           </div>
         </div>
