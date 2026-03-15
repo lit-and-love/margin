@@ -308,7 +308,7 @@ function loadAnnotate() {
     };
 
     const callAI=async(pr)=>{
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:pr}]})});
+      const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:pr}]})});
       const d=await r.json();
       return d.content?.find(b=>b.type==='text')?.text||'Great work!';
     };
@@ -616,7 +616,7 @@ function loadGuide() {
       const sys=`You are an expert middle school ELA teacher (Lit and Love LLC). Generate an annotation guide. Respond ONLY with valid JSON:\n{"title":"short title","summary":"1-2 sentence overview","readingLevel":"level","categories":[{"id":"id","label":"label","emoji":"emoji","questions":[{"q":"question","tip":"short tip"}]}]}\nGenerate 3-5 questions per category. Only include: ${cns}. IDs: comprehension, vocabulary, inference, author, theme, connection, evidence, critical.`;
       try{
         const uc=imgD?[{type:'image',source:{type:'base64',media_type:imgD.mediaType,data:imgD.base64}},{type:'text',text:`Generate annotation guide. Role: ${role}.`}]:`Generate annotation guide. Role: ${role}.\n\nTEXT:\n${txt}`;
-        const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:uc}]})});
+        const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:uc}]})});
         const d=await res.json();
         const raw=d.content?.find(b=>b.type==='text')?.text||'';
         setGuide(JSON.parse(raw.replace(/```json|```/g,'').trim()));
